@@ -13,7 +13,7 @@ vector_t::vector_t() //конструктор
 vector_t::vector_t(vector_t const & other) //конструктор копирования
 {
 	size_ = other.size_;
-	elements_ = new int[size_];
+	elements_ = new int[capacity_];
 	for (int i = 0; i < size_; i++) 
 		elements_[i] = other.elements_[i];
 }
@@ -62,12 +62,12 @@ void vector_t::push_back(int value) //добавление элемента
 		elements_[0]=value;
 	}
 	else {
-		int *elements_2=new int[size_];
+		int *elements_2=new int[capacity_*2];
 		for(int i=0;i<size_;i++)
 			elements_2[i]=elements_[i];
 		delete[]elements_; 
-		size_=size_+1;	
-		elements_=new int[size_];
+		size_++;	
+		elements_=new int[capacity_];
 		for(int i=0;i<size_;i++)
 			elements_[i]=elements_2[i];
 		elements_[size_-1]=value;
@@ -78,17 +78,16 @@ void vector_t::push_back(int value) //добавление элемента
 void vector_t::pop_back() //удаление элемента
 {
 	if(size_!=0) {
-		int *elements_2=new int[size_-1];
-		for(int i=0;i<size_-1;i++) {
-			elements_2[i]=elements_[i];
-		}
-		delete[] elements_;
-		size_=size_-1;
-		elements_=new int[size_];
-		for(int i=0;i<size_;i++)
-			elements_[i]=elements_2[i];
-		delete[]elements_2; //удаление промежуточного массива
-		}
+		int *elements_2= new int [capacity_/2];
+		capacity_= capacity_/2;
+		for (unsigned int i=0; i< size_; i++)
+			elements_2[i] =elements_[i];
+		delete [] elements_;
+		elements_= new int [capacity_];
+		for (unsigned int i=0; i< size_; i++)
+			elements_[i] =elements_2[i];
+		delete [] elements_2;
+	}
 }
 
 int & vector_t::operator [](std::size_t index) //позволяет изменять значение элемента
@@ -101,10 +100,10 @@ int vector_t::operator [](std::size_t index) const
 	return elements_[index];
 }
 
-bool operator !=(vector_t const & lhs, vector_t const & rhs)
+bool operator !=(vector_t const & lhs, vector_t const & rhs) //оператор "не равно"
 {
-	if (lhs->size_ != rhs->size_) return true 
-	for (int i = 0; i < rhs->size_; i++)
+	if (lhs.size() != rhs.size()) return true;
+	for (unsigned int i = 0; i < rhs.size(); i++)
 		if (lhs[i] != rhs[i]) return true;
 	return false;
 }
