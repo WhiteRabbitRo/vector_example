@@ -103,8 +103,8 @@ int vector_t::operator [](std::size_t index) const
 
 bool operator !=(vector_t const & lhs, vector_t const & rhs)
 {
-	if (lhs.size_ != rhs.size_) return true 
-	for (int i = 0; i < rhs.size_; i++)
+	if (lhs->size_ != rhs->size_) return true 
+	for (int i = 0; i < rhs->size_; i++)
 		if (lhs[i] != rhs[i]) return true;
 	return false;
 }
