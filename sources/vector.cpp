@@ -28,9 +28,14 @@ vector_t & vector_t::operator =(vector_t const & other) //оператор пр�
 	return *this;
 }
 
-bool vector_t::operator ==(vector_t const & other) const
+bool vector_t::operator ==(vector_t const & other) const //оператор сравнения
 {
-	return false;
+	if (other.size_ != size_) return false;
+	for (int i=0; i < size_; i++) {
+		if (elements_[i] != other.elements_[i])
+			return false;
+	}
+	return true;
 }
 
 vector_t::~vector_t() //деструктор
@@ -38,22 +43,52 @@ vector_t::~vector_t() //деструктор
 	if (elements_ != nullptr) delete[] elements_;
 }
 
-std::size_t vector_t::size() const
+std::size_t vector_t::size() const //размер
 {
-    return 0;
+    return size_;
 }
 
-std::size_t vector_t::capacity() const
+std::size_t vector_t::capacity() const //память
 {
-    return 0;
+    return capacity_;
 }
 
-void vector_t::push_back(int value)
+void vector_t::push_back(int value) //добавление элемента
 {
+	if(size_ == capacity_) capacity_ *= 2;
+	if(size_ == 0) {
+		size_=size_+1;
+		elements_=new int[1];
+		elements_[0]=value;
+	}
+	else {
+		int *elements_2=new int[size_];
+		for(int i=0;i<size_;i++)
+			elements_2[i]=elements_[i];
+		delete[]elements_; 
+		size_=size_+1;	
+		elements_=new int[size_];
+		for(int i=0;i<size_;i++)
+			elements_[i]=elements_2[i];
+		elements_[size_-1]=value;
+		delete[]elements_2;
+	}
 }
 
-void vector_t::pop_back()
+void vector_t::pop_back() //удаление элемента
 {
+	if(size_!=0) {
+		int *elements_2=new int[size_-1];
+		for(int i=0;i<size_-1;i++) {
+			elements_2[i]=elements_[i];
+		}
+		delete[] elements_;
+		size_=size_-1;
+		elements_=new int[size_];
+		for(int i=0;i<size_;i++)
+			elements_[i]=elements_2[i];
+		delete[]elements_2; //удаление промежуточного массива
+		}
 }
 
 int & vector_t::operator [](std::size_t index) //позволяет изменять значение элемента
@@ -63,10 +98,11 @@ int & vector_t::operator [](std::size_t index) //позволяет изменя
 
 int vector_t::operator [](std::size_t index) const
 {
-	return 0;
+	return elements_[index];
 }
 
 bool operator !=(vector_t const & lhs, vector_t const & rhs)
 {
-	return true;
+	if (lhs != rhs) return true;
+	return false;
 }
