@@ -55,7 +55,7 @@ std::size_t vector_t::capacity() const //память
 
 void vector_t::push_back(int value) //добавление элемента
 {
-	if(size_ == capacity_) capacity_ = capacity * 2;
+	if(size_ == capacity_) capacity_ = capacity_ * 2;
 	if(size_ == 0) {
 		size_=size_+1;
 		elements_=new int[1];
