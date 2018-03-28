@@ -8,7 +8,7 @@ private:
 	std::size_t capacity_; //выделенная память
 public:
 	vector_t(); //конструктор
-	vector_t(vector_t const & other);
+	vector_t(vector_t const & other); //конструктор копирования
 	vector_t & operator =(vector_t const & other);
 	~vector_t(); //деструктор
 
