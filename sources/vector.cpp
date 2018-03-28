@@ -3,16 +3,28 @@
 
 #include "vector.hpp"
 
-vector_t::vector_t()
+vector_t::vector_t() //конструктор
 {
+	size_ = 0;
+	capacity_ = 0;
+	elemetns_ = nullptr;
 }
 
-vector_t::vector_t(vector_t const & other)
+vector_t::vector_t(vector_t const & other) //конструктор копирования
 {
+	size_ = other.size_;
+	elements_ = new int[size_];
+	for (int i = 0; i < size_; i++) 
+		elements_[i] = other.elements_[i];
 }
 
-vector_t & vector_t::operator =(vector_t const & other)
+vector_t & vector_t::operator =(vector_t const & other) //оператор присваивания с копированием
 {
+	if (elements_ != nullptr) delete[] elemets_;
+	size_ = other.size_;
+	elements_ = new int[size_];
+	for (int i = 0; i < size_; i++) elements_[i] = other.elements_[i];
+	
 	return *this;
 }
 
@@ -21,8 +33,9 @@ bool vector_t::operator ==(vector_t const & other) const
 	return false;
 }
 
-vector_t::~vector_t()
+vector_t::~vector_t() //деструктор
 {
+	if (elements_ != nullptr) delete[] elements_;
 }
 
 std::size_t vector_t::size() const
@@ -43,9 +56,9 @@ void vector_t::pop_back()
 {
 }
 
-int & vector_t::operator [](std::size_t index)
+int & vector_t::operator [](std::size_t index) //позволяет изменять значение элемента
 {
-	return elements_[0];
+	return elements_[index];
 }
 
 int vector_t::operator [](std::size_t index) const
